@@ -26,21 +26,13 @@ export default function WikiShell({
           ☰
         </button>
         <Link href="/" className="brand">
-          <svg
+          <img
             className="logo-mark"
-            width="34"
-            height="34"
-            viewBox="0 0 48 48"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path
-              fill="#ffffff"
-              d="M24 3.5l3.9 6.2 7.1-1.9-1.9 7.1 6.2 3.9-6.2 3.9 1.9 7.1-7.1-1.9L24 41.2l-3.9-6.2-7.1 1.9 1.9-7.1L8.7 26l6.2-3.9-1.9-7.1 7.1 1.9L24 3.5z"
-            />
-            <circle cx="24" cy="22.3" r="5.6" fill="#d4501e" />
-          </svg>
+            src="/logo-mark-white.png"
+            alt="MIAvn"
+            width={36}
+            height={32}
+          />
           <span className="brand-text">
             <span className="brand-title">
               WIKI KHO VẬN <span>MIAvn</span>
