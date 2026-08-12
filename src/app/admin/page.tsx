@@ -19,6 +19,9 @@ export default async function AdminHome() {
       <div className="admin-head">
         <h1>Quản lý nội dung Wiki</h1>
         <div className="spacer" />
+        <Link href="/admin/nhan-vien" className="btn btn-ghost">
+          Quản lý nhân viên
+        </Link>
         <Link href="/" className="btn btn-ghost">
           Xem Wiki
         </Link>

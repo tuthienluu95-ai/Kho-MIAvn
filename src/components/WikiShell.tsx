@@ -75,6 +75,16 @@ export default function WikiShell({
               ))}
             </div>
           ))}
+
+          <div className="group">
+            <Link
+              href="/nhan-vien"
+              className={`root-link ${activeSlug === "__staff" ? "active" : ""}`}
+              onClick={() => setOpen(false)}
+            >
+              👥 Danh bạ nhân viên
+            </Link>
+          </div>
         </nav>
 
         <main className="content">{children}</main>
