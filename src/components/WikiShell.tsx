@@ -54,39 +54,23 @@ export default function WikiShell({
         <nav className={`nav ${open ? "open" : ""}`}>
           {tree.map((node) => (
             <div key={node.slug}>
-              <div className="group">
-                <Link
-                  href={`/wiki/${node.slug}`}
-                  className={`root-link ${activeSlug === node.slug ? "active" : ""}`}
-                  onClick={() => setOpen(false)}
-                >
-                  {node.title}
-                </Link>
-                {node.children.map((child) => (
-                  <Link
-                    key={child.slug}
-                    href={`/wiki/${child.slug}`}
-                    className={`child-link ${
-                      activeSlug === child.slug ? "active-child" : ""
-                    }`}
-                    onClick={() => setOpen(false)}
-                  >
-                    {child.title}
-                  </Link>
-                ))}
-              </div>
-
+              <NavItem
+                node={node}
+                activeSlug={activeSlug}
+                level={0}
+                onNavigate={() => setOpen(false)}
+              />
               {/* Danh bạ nhân viên đứng ngay sau Trang chủ */}
               {node.slug === "trang-chu" && (
-                <div className="group">
-                  <Link
-                    href="/nhan-vien"
-                    className={`root-link ${activeSlug === "__staff" ? "active" : ""}`}
-                    onClick={() => setOpen(false)}
-                  >
-                    👥 Danh bạ nhân viên
-                  </Link>
-                </div>
+                <Link
+                  href="/nhan-vien"
+                  className={`nav-link level-0 ${
+                    activeSlug === "__staff" ? "active" : ""
+                  }`}
+                  onClick={() => setOpen(false)}
+                >
+                  👥 Danh bạ nhân viên
+                </Link>
               )}
             </div>
           ))}
@@ -94,6 +78,65 @@ export default function WikiShell({
 
         <main className="content">{children}</main>
       </div>
+    </div>
+  );
+}
+
+function NavItem({
+  node,
+  activeSlug,
+  level,
+  onNavigate,
+}: {
+  node: NavNode;
+  activeSlug: string;
+  level: number;
+  onNavigate: () => void;
+}) {
+  const hasChildren = node.children.length > 0;
+
+  // Mở sẵn nếu mục này hoặc con/cháu của nó đang active
+  const containsActive = (n: NavNode): boolean =>
+    n.slug === activeSlug || n.children.some(containsActive);
+  const [expanded, setExpanded] = useState(() => containsActive(node));
+
+  const isActive = node.slug === activeSlug;
+
+  if (!hasChildren) {
+    return (
+      <Link
+        href={`/wiki/${node.slug}`}
+        className={`nav-link level-${level} ${isActive ? "active" : ""}`}
+        onClick={onNavigate}
+      >
+        {node.title}
+      </Link>
+    );
+  }
+
+  return (
+    <div className="nav-group">
+      <button
+        className={`nav-link nav-toggle level-${level} ${isActive ? "active" : ""}`}
+        onClick={() => setExpanded((v) => !v)}
+        aria-expanded={expanded}
+      >
+        <span className="nav-caret">{expanded ? "▾" : "▸"}</span>
+        <span className="nav-title">{node.title}</span>
+      </button>
+      {expanded && (
+        <div className="nav-children">
+          {node.children.map((child) => (
+            <NavItem
+              key={child.slug}
+              node={child}
+              activeSlug={activeSlug}
+              level={level + 1}
+              onNavigate={onNavigate}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
