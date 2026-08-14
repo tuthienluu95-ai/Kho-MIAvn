@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase-server";
 import { buildNavTree, type Page } from "@/lib/pages";
 import WikiShell from "@/components/WikiShell";
+import ArticleContent from "@/components/ArticleContent";
 
 // ISR: làm mới tối đa mỗi 60s
 export const revalidate = 60;
@@ -60,10 +61,7 @@ export default async function WikiPage({
       {parent && <div className="crumb">{parent.title} /</div>}
       <h1 className="page-title">{current.title}</h1>
       <div className="updated">Cập nhật: {updated}</div>
-      <article
-        className="prose"
-        dangerouslySetInnerHTML={{ __html: current.content }}
-      />
+      <ArticleContent html={current.content} />
     </WikiShell>
   );
 }
