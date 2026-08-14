@@ -197,53 +197,7 @@ a { color: inherit; text-decoration: none; }
   .topbar .admin-link { display: none; }
 }
 
-/* ── Teaser intro (chạy mỗi lần mở) ─────────────────── */
-.teaser {
-  position: fixed; inset: 0; z-index: 9999;
-  background: linear-gradient(160deg, #e8622a 0%, #d4501e 60%, #b8410f 100%);
-  display: grid; place-items: center;
-  animation: teaser-fade-out 0.7s ease 3.2s forwards;
-}
-.teaser-inner {
-  position: relative;
-  display: grid; place-items: center;
-  width: min(90vw, 520px); height: 260px;
-}
-.teaser-letters {
-  display: flex; gap: 0.02em;
-  font-weight: 800; font-size: clamp(48px, 14vw, 96px);
-  color: #fff; letter-spacing: 0.01em;
-  animation: teaser-letters-out 0.5s ease 1.5s forwards;
-}
-.teaser-letter {
-  display: inline-block; opacity: 0;
-  transform: translateX(var(--from, -60px));
-  animation: teaser-letter-in 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-}
-.teaser-logo {
-  position: absolute;
-  width: clamp(150px, 42vw, 240px); height: auto;
-  opacity: 0; transform: scale(0.7);
-  animation: teaser-logo-in 0.7s cubic-bezier(0.2, 0.9, 0.2, 1) 1.65s forwards;
-}
-@keyframes teaser-letter-in {
-  to { opacity: 1; transform: translateX(0); }
-}
-@keyframes teaser-letters-out {
-  to { opacity: 0; transform: scale(0.9); }
-}
-@keyframes teaser-logo-in {
-  0%   { opacity: 0; transform: scale(0.7); }
-  60%  { opacity: 1; transform: scale(1.06); }
-  100% { opacity: 1; transform: scale(1); }
-}
-@keyframes teaser-fade-out {
-  to { opacity: 0; visibility: hidden; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .teaser { animation: teaser-fade-out 0.4s ease 1.2s forwards; }
-  .teaser-letter, .teaser-logo, .teaser-letters { animation-duration: 0.3s; }
-}
+
 
 /* ── Sơ đồ lưu trình (flow) trong nội dung bài ──────── */
 .prose .flow {
@@ -335,4 +289,45 @@ a { color: inherit; text-decoration: none; }
   font-size: 11px; font-weight: 600; color: #9a3412;
   background: #ffe4d6; border-radius: 999px; padding: 1px 8px;
   white-space: nowrap;
+}
+
+/* ── Teaser intro (nhẹ, chạy mỗi lần) ───────────────── */
+.teaser {
+  position: fixed; inset: 0; z-index: 9999;
+  background: linear-gradient(160deg, #e05a24 0%, #d4501e 100%);
+  display: grid; place-items: center;
+  animation: teaser-out 0.4s ease 2s forwards;
+  will-change: opacity;
+}
+.teaser-inner {
+  position: relative; display: grid; place-items: center;
+  width: min(84vw, 420px); height: 200px;
+}
+.teaser-letters {
+  display: flex; gap: 0.02em;
+  font-weight: 800; font-size: clamp(44px, 13vw, 84px);
+  color: #fff;
+  animation: teaser-letters-out 0.35s ease 1.35s forwards;
+  will-change: opacity;
+}
+.teaser-letter {
+  display: inline-block; opacity: 0;
+  transform: translateY(14px);
+  animation: teaser-letter-in 0.4s ease forwards;
+  will-change: transform, opacity;
+}
+.teaser-logo {
+  position: absolute;
+  width: clamp(130px, 38vw, 200px); height: auto;
+  opacity: 0;
+  animation: teaser-logo-in 0.45s ease 1.4s forwards;
+  will-change: opacity;
+}
+@keyframes teaser-letter-in { to { opacity: 1; transform: translateY(0); } }
+@keyframes teaser-letters-out { to { opacity: 0; } }
+@keyframes teaser-logo-in { to { opacity: 1; } }
+@keyframes teaser-out { to { opacity: 0; visibility: hidden; } }
+@media (prefers-reduced-motion: reduce) {
+  .teaser { animation: teaser-out 0.3s ease 0.8s forwards; }
+  .teaser-letter, .teaser-logo, .teaser-letters { animation-duration: 0.2s; animation-delay: 0s; }
 }

@@ -53,38 +53,43 @@ export default function WikiShell({
         />
         <nav className={`nav ${open ? "open" : ""}`}>
           {tree.map((node) => (
-            <div className="group" key={node.slug}>
-              <Link
-                href={`/wiki/${node.slug}`}
-                className={`root-link ${activeSlug === node.slug ? "active" : ""}`}
-                onClick={() => setOpen(false)}
-              >
-                {node.title}
-              </Link>
-              {node.children.map((child) => (
+            <div key={node.slug}>
+              <div className="group">
                 <Link
-                  key={child.slug}
-                  href={`/wiki/${child.slug}`}
-                  className={`child-link ${
-                    activeSlug === child.slug ? "active-child" : ""
-                  }`}
+                  href={`/wiki/${node.slug}`}
+                  className={`root-link ${activeSlug === node.slug ? "active" : ""}`}
                   onClick={() => setOpen(false)}
                 >
-                  {child.title}
+                  {node.title}
                 </Link>
-              ))}
+                {node.children.map((child) => (
+                  <Link
+                    key={child.slug}
+                    href={`/wiki/${child.slug}`}
+                    className={`child-link ${
+                      activeSlug === child.slug ? "active-child" : ""
+                    }`}
+                    onClick={() => setOpen(false)}
+                  >
+                    {child.title}
+                  </Link>
+                ))}
+              </div>
+
+              {/* Danh bạ nhân viên đứng ngay sau Trang chủ */}
+              {node.slug === "trang-chu" && (
+                <div className="group">
+                  <Link
+                    href="/nhan-vien"
+                    className={`root-link ${activeSlug === "__staff" ? "active" : ""}`}
+                    onClick={() => setOpen(false)}
+                  >
+                    👥 Danh bạ nhân viên
+                  </Link>
+                </div>
+              )}
             </div>
           ))}
-
-          <div className="group">
-            <Link
-              href="/nhan-vien"
-              className={`root-link ${activeSlug === "__staff" ? "active" : ""}`}
-              onClick={() => setOpen(false)}
-            >
-              👥 Danh bạ nhân viên
-            </Link>
-          </div>
         </nav>
 
         <main className="content">{children}</main>

@@ -3,8 +3,13 @@ import { createClient } from "@/lib/supabase-server";
 import { buildNavTree, type Page } from "@/lib/pages";
 import WikiShell from "@/components/WikiShell";
 
-// Cập nhật lại tối đa mỗi 30s (ISR) — quản lý sửa xong nội dung mới hiện nhanh
-export const revalidate = 30;
+// ISR: làm mới tối đa mỗi 60s
+export const revalidate = 60;
+
+// Kiểu nhẹ cho nav (không có content)
+type NavRow = Pick<Page, "id" | "slug" | "title" | "parent_slug" | "sort_order"> & {
+  content: string;
+};
 
 export default async function WikiPage({
   params,
@@ -13,27 +18,35 @@ export default async function WikiPage({
 }) {
   const supabase = createClient();
 
-  const { data: pages } = await supabase
-    .from("pages")
-    .select("id, slug, title, content, parent_slug, sort_order, updated_at")
-    .order("sort_order", { ascending: true });
+  // 2 query song song: nav nhẹ (không content) + đúng 1 bài hiện tại
+  const [{ data: navRows }, { data: current }] = await Promise.all([
+    supabase
+      .from("pages")
+      .select("id, slug, title, parent_slug, sort_order")
+      .order("sort_order", { ascending: true }),
+    supabase
+      .from("pages")
+      .select("slug, title, content, parent_slug, updated_at")
+      .eq("slug", params.slug)
+      .single(),
+  ]);
 
-  if (!pages) {
+  if (!navRows) {
     return (
       <div className="content">
         <p>Chưa kết nối được cơ sở dữ liệu. Kiểm tra biến môi trường Supabase.</p>
       </div>
     );
   }
-
-  const current = (pages as Page[]).find((p) => p.slug === params.slug);
   if (!current) notFound();
 
-  const tree = buildNavTree(pages as Page[]);
+  // buildNavTree cần trường content — thêm rỗng cho nav
+  const tree = buildNavTree(
+    (navRows as NavRow[]).map((r) => ({ ...r, content: "" })) as Page[]
+  );
 
-  // Tìm mục cha để hiện breadcrumb
   const parent = current.parent_slug
-    ? (pages as Page[]).find((p) => p.slug === current.parent_slug)
+    ? (navRows as NavRow[]).find((p) => p.slug === current.parent_slug)
     : null;
 
   const updated = new Date(current.updated_at).toLocaleDateString("vi-VN", {
