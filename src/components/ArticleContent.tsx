@@ -54,7 +54,6 @@ export default function ArticleContent({ html }: { html: string }) {
             svgEl.style.maxWidth = "100%";
             svgEl.style.height = "auto";
           }
-
           const target =
             block.tagName === "CODE" ? block.parentElement ?? block : block;
           target.replaceWith(holder);

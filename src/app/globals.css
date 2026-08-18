@@ -365,20 +365,20 @@ a { color: inherit; text-decoration: none; }
   text-transform: uppercase; letter-spacing: 0.04em; color: var(--amber-dark);
 }
 
-/* ── Sơ đồ: khung cuộn dọc, kích thước hợp lý ───────── */
+/* ── Sơ đồ NGANG: cuộn ngang, chữ đọc rõ ────────────── */
 .prose .mmd-holder {
   width: 100%;
-  max-height: 640px;
-  overflow: auto;
-  padding: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 12px 4px 16px;
   -webkit-overflow-scrolling: touch;
 }
 .prose .mmd-holder svg {
   display: block;
   margin: 0 auto;
-  max-width: 100%;
+  max-width: none;   /* giữ kích thước thật để chữ đủ lớn */
   height: auto;
 }
-.prose .mmd-holder::-webkit-scrollbar { width: 8px; height: 8px; }
+.prose .mmd-holder::-webkit-scrollbar { height: 8px; }
 .prose .mmd-holder::-webkit-scrollbar-thumb { background: #e0c9b8; border-radius: 999px; }
 .prose .mmd-holder::-webkit-scrollbar-track { background: transparent; }
