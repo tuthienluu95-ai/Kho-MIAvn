@@ -80,7 +80,8 @@ a { color: inherit; text-decoration: none; }
 .content .updated { font-size: 12px; color: var(--muted); margin-bottom: 24px; }
 
 /* Rendered wiki HTML */
-.prose { max-width: 760px; }
+.prose { max-width: 900px; }
+.prose .mermaid-wrap { max-width: none; }
 .prose h2 { font-size: 22px; margin: 28px 0 10px; font-weight: 700; }
 .prose h3 { font-size: 18px; margin: 22px 0 8px; font-weight: 700; }
 .prose p { margin: 0 0 14px; }
@@ -351,47 +352,24 @@ a { color: inherit; text-decoration: none; }
   margin: 0 0 10px; font-size: 13px; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.04em; color: var(--amber-dark);
 }
-.mmd-frame {
-  position: relative;
-  border: 1px solid var(--line); border-radius: 10px;
-  background:
-    linear-gradient(#fefefe 0 0) padding-box,
-    repeating-linear-gradient(0deg, #f3ece5 0 1px, transparent 1px 22px),
-    repeating-linear-gradient(90deg, #f3ece5 0 1px, transparent 1px 22px);
-  overflow: hidden;
-}
-.mmd-viewport {
-  position: relative; width: 100%; height: 520px;
-  overflow: hidden; cursor: grab; touch-action: none;
-}
-.mmd-viewport.grabbing { cursor: grabbing; }
-.mmd-stage {
-  position: absolute; top: 0; left: 0;
-  transform-origin: 0 0; will-change: transform;
-}
-.mmd-stage svg { display: block; }
-.mmd-toolbar {
-  position: absolute; right: 10px; bottom: 10px;
-  display: flex; gap: 6px; z-index: 2;
-}
-.mmd-btn {
-  width: 34px; height: 34px; border-radius: 8px;
-  border: 1px solid var(--line); background: #fff; color: var(--ink);
-  font-size: 17px; font-weight: 700; cursor: pointer;
-  box-shadow: 0 1px 4px rgba(20,33,61,.12);
-  display: grid; place-items: center; line-height: 1;
-}
-.mmd-btn:hover { background: var(--ink); color: #fff; border-color: var(--ink); }
-@media (max-width: 640px) {
-  .mmd-viewport { height: 380px; }
-}
 
-.mmd-hint {
-  position: absolute; left: 12px; bottom: 12px; z-index: 2;
-  font-size: 11px; color: var(--muted);
-  background: rgba(255,255,255,.85); padding: 4px 10px; border-radius: 999px;
-  pointer-events: none;
+/* ── Khung sơ đồ: cuộn ngang, kích thước thật ───────── */
+.prose .mmd-scroll {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 12px 4px 16px;
+  -webkit-overflow-scrolling: touch;
 }
-@media (max-width: 640px) {
-  .mmd-hint { display: none; }
+.prose .mmd-scroll svg {
+  display: block;
+  margin: 0 auto;
+  max-width: none;
+  height: auto;
 }
+/* Thanh cuộn nhẹ nhàng */
+.prose .mmd-scroll::-webkit-scrollbar { height: 8px; }
+.prose .mmd-scroll::-webkit-scrollbar-thumb {
+  background: #e0c9b8; border-radius: 999px;
+}
+.prose .mmd-scroll::-webkit-scrollbar-track { background: transparent; }
