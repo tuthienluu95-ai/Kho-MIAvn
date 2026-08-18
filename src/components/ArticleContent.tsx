@@ -81,6 +81,12 @@ function buildZoomFrame(svg: string): HTMLElement {
   viewport.appendChild(stage);
   frame.appendChild(viewport);
 
+  // Gợi ý thao tác
+  const hint = document.createElement("div");
+  hint.className = "mmd-hint";
+  hint.textContent = "Kéo để di chuyển · cuộn hoặc dùng nút để phóng to";
+  frame.appendChild(hint);
+
   // Thanh nút
   const bar = document.createElement("div");
   bar.className = "mmd-toolbar";
@@ -109,29 +115,39 @@ function buildZoomFrame(svg: string): HTMLElement {
   }
 
   function fit() {
-    // Thu toàn bộ sơ đồ vừa khung
+    // Đo kích thước thật của sơ đồ
     const vpRect = viewport.getBoundingClientRect();
     const g = stage.querySelector("svg");
     if (!g) return;
-    const vb = (g as SVGSVGElement).viewBox.baseVal;
+    const vb = (g as SVGSVGElement).viewBox?.baseVal;
     const dw = vb && vb.width ? vb.width : g.getBoundingClientRect().width;
     const dh = vb && vb.height ? vb.height : g.getBoundingClientRect().height;
-    const pad = 24;
+    if (!dw || !dh) return;
+
+    const pad = 32;
     const sx = (vpRect.width - pad) / dw;
     const sy = (vpRect.height - pad) / dh;
-    baseScale = Math.min(sx, sy);
+
+    // Sơ đồ ngang: ưu tiên vừa chiều rộng để chữ đủ lớn, đọc được.
+    // Chỉ hạ theo chiều cao nếu quá cao. Không phóng quá 1.4x.
+    baseScale = Math.min(sx, sy, 1.4);
+    // Nếu vừa-rộng khiến nó vẫn lọt chiều cao thì dùng vừa-rộng (to hơn).
+    if (dw * sx <= vpRect.height - pad) {
+      baseScale = Math.min(sx, 1.4);
+    }
+
     scale = baseScale;
-    tx = (vpRect.width - dw * scale) / 2;
-    ty = (vpRect.height - dh * scale) / 2;
+    tx = Math.max((vpRect.width - dw * scale) / 2, 0);
+    ty = Math.max((vpRect.height - dh * scale) / 2, 0);
     apply();
   }
 
   btnIn.onclick = () => {
-    scale = Math.min(scale * 1.25, baseScale * 6);
+    scale = Math.min(scale * 1.25, baseScale * 8);
     apply();
   };
   btnOut.onclick = () => {
-    scale = Math.max(scale / 1.25, baseScale * 0.5);
+    scale = Math.max(scale / 1.25, baseScale * 0.6);
     apply();
   };
   btnFit.onclick = () => fit();
@@ -166,7 +182,7 @@ function buildZoomFrame(svg: string): HTMLElement {
     (e) => {
       e.preventDefault();
       const factor = e.deltaY < 0 ? 1.1 : 1 / 1.1;
-      scale = Math.min(Math.max(scale * factor, baseScale * 0.5), baseScale * 6);
+      scale = Math.min(Math.max(scale * factor, baseScale * 0.6), baseScale * 8);
       apply();
     },
     { passive: false }
