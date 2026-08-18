@@ -353,23 +353,15 @@ a { color: inherit; text-decoration: none; }
   text-transform: uppercase; letter-spacing: 0.04em; color: var(--amber-dark);
 }
 
-/* ── Khung sơ đồ: cuộn ngang, kích thước thật ───────── */
-.prose .mmd-scroll {
+/* ── Sơ đồ dọc: vừa khung, chữ rõ ───────────────────── */
+.prose .mmd-holder {
   width: 100%;
+  padding: 12px 0 16px;
   overflow-x: auto;
-  overflow-y: hidden;
-  padding: 12px 4px 16px;
-  -webkit-overflow-scrolling: touch;
 }
-.prose .mmd-scroll svg {
+.prose .mmd-holder svg {
   display: block;
   margin: 0 auto;
-  max-width: none;
+  max-width: 100%;
   height: auto;
 }
-/* Thanh cuộn nhẹ nhàng */
-.prose .mmd-scroll::-webkit-scrollbar { height: 8px; }
-.prose .mmd-scroll::-webkit-scrollbar-thumb {
-  background: #e0c9b8; border-radius: 999px;
-}
-.prose .mmd-scroll::-webkit-scrollbar-track { background: transparent; }

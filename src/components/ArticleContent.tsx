@@ -21,7 +21,7 @@ export default function ArticleContent({ html }: { html: string }) {
         startOnLoad: false,
         theme: "base",
         securityLevel: "loose",
-        flowchart: { curve: "basis", useMaxWidth: false, htmlLabels: true },
+        flowchart: { curve: "basis", useMaxWidth: true, htmlLabels: true },
         themeVariables: {
           primaryColor: "#fff5ec",
           primaryBorderColor: "#d4501e",
@@ -42,23 +42,22 @@ export default function ArticleContent({ html }: { html: string }) {
           const { svg } = await mermaid.render(id, code);
           if (cancelled) return;
 
-          // Khung cuộn ngang, sơ đồ ở kích thước thật (đọc được)
-          const scroller = document.createElement("div");
-          scroller.className = "mmd-scroll";
-          scroller.innerHTML = svg;
+          const holder = document.createElement("div");
+          holder.className = "mmd-holder";
+          holder.innerHTML = svg;
 
-          const svgEl = scroller.querySelector("svg");
+          const svgEl = holder.querySelector("svg");
           if (svgEl) {
-            // Giữ kích thước thật; không ép co
             svgEl.removeAttribute("style");
             svgEl.style.display = "block";
             svgEl.style.margin = "0 auto";
-            svgEl.style.maxWidth = "none";
+            svgEl.style.width = "100%";
+            svgEl.style.height = "auto";
           }
 
           const target =
             block.tagName === "CODE" ? block.parentElement ?? block : block;
-          target.replaceWith(scroller);
+          target.replaceWith(holder);
         } catch {
           // Cú pháp sai: giữ nguyên text để dễ sửa
         }
