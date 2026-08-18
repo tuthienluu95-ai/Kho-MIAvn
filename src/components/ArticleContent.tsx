@@ -21,7 +21,7 @@ export default function ArticleContent({ html }: { html: string }) {
         startOnLoad: false,
         theme: "base",
         securityLevel: "loose",
-        flowchart: { curve: "basis", useMaxWidth: true, htmlLabels: true },
+        flowchart: { curve: "basis", useMaxWidth: false, htmlLabels: true },
         themeVariables: {
           primaryColor: "#fff5ec",
           primaryBorderColor: "#d4501e",
@@ -51,7 +51,7 @@ export default function ArticleContent({ html }: { html: string }) {
             svgEl.removeAttribute("style");
             svgEl.style.display = "block";
             svgEl.style.margin = "0 auto";
-            svgEl.style.width = "100%";
+            svgEl.style.maxWidth = "100%";
             svgEl.style.height = "auto";
           }
 
